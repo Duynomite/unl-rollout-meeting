@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNL Ancillary Rollout — CPC Team Meeting</title>
+
+  <!--
+    UNL Ancillary Rollout — Friday team announcement presentation.
+
+    USAGE:
+    - Open in full-screen (F11 or browser native fullscreen).
+    - Navigate: → (next), ← (prev), Home/End, Space (next), Esc (overview).
+    - Speaker notes: press N to toggle. Visible only to presenter, not screen-shared
+      audience (overlays the bottom of the slide).
+    - Live demos: links open Comp Model + Rx Calculator in new tabs.
+
+    CO-PRESENTERS: Connor + Binh. Suggested natural division:
+    - Connor: opening (1-3), why ancillary (6-9), income (25-28), close (33-34)
+    - Binh: meet UNL (4), customer gap (10-13), products (14-22), training (30-32)
+    - Whoever leads a section also fields questions about it.
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       RESET + BASE
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: "Jost", sans-serif;
+      background: #10202C;
+      color: #34252F;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ============================================================
+       DECK + SLIDE STRUCTURE
+       ============================================================ */
+    .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      padding: clamp(2rem, 5vh, 4rem) clamp(2.5rem, 6vw, 6rem);
+      background: #FBFAF7;
+      color: #34252F;
+      animation: slideIn 0.35s ease-out;
+    }
+    .slide.is-active { display: flex; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slide variants (background palettes) */
+    .slide--dark { background: linear-gradient(135deg, #10202C 0%, #2D5A7A 100%); color: white; }
+    .slide--navy { background: #2D5A7A; color: white; }
+    .slide--accent { background: linear-gradient(135deg, #2D5A7A 0%, #10202C 100%); color: white; }
+
+    /* ============================================================
+       TYPOGRAPHY — sized for Zoom screen-share legibility (1920x1080 baseline)
+       ============================================================ */
+    .eyebrow {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #3DCEB2;
+      margin-bottom: clamp(1rem, 2vh, 1.5rem);
+    }
+    .slide--light .eyebrow, .slide:not(.slide--dark):not(.slide--navy):not(.slide--accent) .eyebrow { color: #4B7797; }
+
+    .title-mega {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 0.98;
+      letter-spacing: -0.01em;
+      color: #2D5A7A;
+    }
+    .slide--dark .title-mega, .slide--navy .title-mega, .slide--accent .title-mega { color: white; }
+
+    .title-big {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.25rem, 5vw, 4.25rem);
+      line-height: 1.05;
+      letter-spacing: -0.005em;
+      color: #2D5A7A;
+      margin-bottom: clamp(1rem, 2vh, 1.5rem);
+    }
+    .slide--dark .title-big, .slide--navy .title-big, .slide--accent .title-big { color: white; }
+
+    .title-mid {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.75rem, 3.5vw, 3rem);
+      line-height: 1.1;
+      color: #2D5A7A;
+      margin-bottom: clamp(0.75rem, 1.5vh, 1.15rem);
+    }
+    .slide--dark .title-mid, .slide--navy .title-mid, .slide--accent .title-mid { color: white; }
+
+    .body-text {
+      font-family: "Jost", sans-serif;
+      font-size: clamp(1.15rem, 1.7vw, 1.65rem);
+      line-height: 1.5;
+      color: #34252F;
+      max-width: 56rem;
+    }
+    .slide--dark .body-text, .slide--navy .body-text, .slide--accent .body-text { color: rgba(255,255,255,0.85); }
+    .body-text strong { color: #2D5A7A; font-weight: 600; }
+    .slide--dark .body-text strong, .slide--navy .body-text strong, .slide--accent .body-text strong { color: #3DCEB2; }
+
+    .body-small {
+      font-family: "Jost", sans-serif;
+      font-size: clamp(0.95rem, 1.3vw, 1.2rem);
+      line-height: 1.55;
+      color: #4B7797;
+    }
+    .slide--dark .body-small, .slide--navy .body-small, .slide--accent .body-small { color: rgba(255,255,255,0.65); }
+
+    /* Hero stat (giant number) */
+    .hero-stat {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 900;
+      font-size: clamp(7rem, 18vw, 18rem);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      color: #2D5A7A;
+      background: linear-gradient(135deg, #2D5A7A 0%, #3DCEB2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .slide--dark .hero-stat, .slide--navy .hero-stat, .slide--accent .hero-stat {
+      background: linear-gradient(135deg, #3DCEB2 0%, #FBFAF7 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-stat-sub {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 600;
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
+      color: #2D5A7A;
+      margin-top: clamp(0.5rem, 1vh, 1rem);
+      letter-spacing: 0.02em;
+    }
+    .slide--dark .hero-stat-sub, .slide--navy .hero-stat-sub, .slide--accent .hero-stat-sub { color: white; }
+
+    /* Three-column grid layouts */
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1.25rem, 2vw, 2rem);
+      margin-top: clamp(1.5rem, 3vh, 2.5rem);
+    }
+    .col-card {
+      background: rgba(45,90,122,0.05);
+      border: 1px solid rgba(45,90,122,0.18);
+      border-radius: clamp(0.75rem, 1.5vw, 1.25rem);
+      padding: clamp(1.25rem, 2.5vw, 2rem) clamp(1.5rem, 2.5vw, 2.2rem);
+    }
+    .slide--dark .col-card, .slide--navy .col-card, .slide--accent .col-card {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .col-card-num {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      color: #3DCEB2;
+      line-height: 1;
+      margin-bottom: clamp(0.5rem, 1vh, 0.85rem);
+    }
+    .col-card-title {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+      color: #2D5A7A;
+      line-height: 1.2;
+      margin-bottom: clamp(0.5rem, 1vh, 0.85rem);
+    }
+    .slide--dark .col-card-title, .slide--navy .col-card-title, .slide--accent .col-card-title { color: white; }
+    .col-card-body {
+      font-family: "Jost", sans-serif;
+      font-size: clamp(0.95rem, 1.25vw, 1.2rem);
+      line-height: 1.55;
+      color: #34252F;
+    }
+    .slide--dark .col-card-body, .slide--navy .col-card-body, .slide--accent .col-card-body { color: rgba(255,255,255,0.78); }
+
+    /* Two-column comparison */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(1.5rem, 3vw, 3rem);
+      margin-top: clamp(1.5rem, 3vh, 2.5rem);
+    }
+
+    /* Quadrant (4 boxes) */
+    .quad {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: clamp(1rem, 2vw, 1.75rem);
+      margin-top: clamp(1.25rem, 2vh, 2rem);
+    }
+
+    /* Big gap table (Medicare gap diagram) */
+    .gap-table {
+      width: 100%;
+      max-width: 70rem;
+      margin: clamp(1rem, 2vh, 2rem) auto 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-family: "Urbanist", sans-serif;
+    }
+    .gap-table th {
+      font-weight: 700;
+      font-size: clamp(1.05rem, 1.5vw, 1.45rem);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #4B7797;
+      padding: 0.75rem 1.25rem;
+      text-align: center;
+      border-bottom: 2px solid #2D5A7A;
+    }
+    .gap-table td {
+      padding: clamp(0.85rem, 1.5vh, 1.25rem) clamp(0.85rem, 1.5vw, 1.5rem);
+      font-size: clamp(1.05rem, 1.5vw, 1.5rem);
+      font-weight: 600;
+      color: #34252F;
+      border-bottom: 1px solid rgba(45,90,122,0.15);
+    }
+    .gap-table td:first-child {
+      font-weight: 700;
+      color: #2D5A7A;
+      text-align: left;
+    }
+    .gap-table td.covered { color: #2D5A7A; text-align: center; }
+    .gap-table td.notcovered { color: #C97A1F; text-align: center; font-weight: 700; }
+    .gap-table .gap-arrow {
+      text-align: center;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #3DCEB2;
+      font-weight: 800;
+      padding-top: 1rem;
+    }
+    .gap-table tr.unl-row td {
+      background: linear-gradient(135deg, rgba(61,206,178,0.12) 0%, rgba(45,90,122,0.06) 100%);
+      color: #2D5A7A;
+      font-weight: 700;
+      border-bottom: none;
+    }
+    .gap-table tr.unl-row td:first-child { color: #2D5A7A; }
+    .gap-table tr.unl-row td.covered { color: #2D5A7A; }
+
+    /* Math walkthrough */
+    .math-rows {
+      max-width: 50rem;
+      margin: clamp(1.5rem, 3vh, 2.5rem) auto 0;
+      font-family: "JetBrains Mono", monospace;
+      font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+    }
+    .math-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px dashed rgba(45,90,122,0.25);
+      align-items: baseline;
+    }
+    .math-row:last-child { border-bottom: none; }
+    .math-row.is-final {
+      padding-top: 1.25rem;
+      margin-top: 0.5rem;
+      border-top: 3px solid #2D5A7A;
+      border-bottom: none;
+    }
+    .math-label {
+      font-family: "Jost", sans-serif;
+      color: #4B7797;
+      font-weight: 500;
+    }
+    .math-val {
+      font-weight: 700;
+      color: #2D5A7A;
+      text-align: right;
+    }
+    .math-row.is-final .math-val { color: #3DCEB2; font-size: clamp(2rem, 3.5vw, 3.5rem); }
+    .math-row.is-final .math-label { color: #2D5A7A; font-weight: 700; }
+
+    /* Schedule / calendar */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: clamp(0.75rem, 1.2vw, 1.25rem);
+      margin-top: clamp(1.5rem, 3vh, 2.5rem);
+    }
+    .day-card {
+      background: white;
+      border: 1px solid #D8E6E3;
+      border-radius: clamp(0.6rem, 1vw, 1rem);
+      padding: clamp(1rem, 1.8vh, 1.5rem) clamp(0.85rem, 1.5vw, 1.25rem);
+      text-align: center;
+      opacity: 0.5;
+    }
+    .day-card.is-active { opacity: 1; border-color: #3DCEB2; box-shadow: 0 4px 12px rgba(45,90,122,0.15); }
+    .day-card-day {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #4B7797;
+      margin-bottom: 0.5rem;
+    }
+    .day-card.is-active .day-card-day { color: #2D5A7A; }
+    .day-card-content {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 600;
+      font-size: clamp(0.95rem, 1.3vw, 1.3rem);
+      color: #2D5A7A;
+      line-height: 1.25;
+    }
+    .day-card-sub {
+      font-family: "Jost", sans-serif;
+      font-size: clamp(0.75rem, 1vw, 0.95rem);
+      color: #4B7797;
+      margin-top: 0.4rem;
+    }
+    .day-card.is-rest .day-card-content { color: #A7B8C5; font-weight: 500; }
+
+    /* 4-tool ecosystem */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(0.85rem, 1.5vw, 1.25rem);
+      margin-top: clamp(1.5rem, 3vh, 2.5rem);
+    }
+    .tool-card {
+      background: white;
+      border: 1px solid #D8E6E3;
+      border-radius: clamp(0.6rem, 1vw, 1rem);
+      padding: clamp(1.1rem, 2vh, 1.6rem) clamp(1rem, 1.5vw, 1.4rem);
+      position: relative;
+    }
+    .tool-card-num {
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700;
+      font-size: clamp(0.95rem, 1.3vw, 1.2rem);
+      color: #3DCEB2;
+      margin-bottom: 0.4rem;
+    }
+    .tool-card-name {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.05rem, 1.5vw, 1.4rem);
+      color: #2D5A7A;
+      margin-bottom: 0.5rem;
+    }
+    .tool-card-desc {
+      font-family: "Jost", sans-serif;
+      font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+      line-height: 1.45;
+      color: #4B7797;
+    }
+
+    /* CTA / link */
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: clamp(0.7rem, 1.3vh, 1rem) clamp(1.25rem, 2vw, 1.85rem);
+      background: #3DCEB2;
+      color: #10202C;
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: clamp(0.85rem, 1.15vw, 1.05rem);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      text-decoration: none;
+      margin-top: clamp(1.25rem, 2.5vh, 2rem);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(61,206,178,0.35); }
+    .cta-secondary { background: transparent; color: #3DCEB2; border: 2px solid #3DCEB2; }
+    .cta-secondary:hover { background: rgba(61,206,178,0.1); }
+
+    /* ============================================================
+       NAV + UI CONTROLS
+       ============================================================ */
+    .deck-ui {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      z-index: 100;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.7);
+      mix-blend-mode: difference;
+      pointer-events: none;
+    }
+    .deck-counter {
+      background: rgba(0,0,0,0.55);
+      padding: 0.4rem 0.7rem;
+      border-radius: 0.4rem;
+      color: white;
+      pointer-events: auto;
+    }
+    .deck-key-hint {
+      background: rgba(0,0,0,0.4);
+      padding: 0.4rem 0.7rem;
+      border-radius: 0.4rem;
+      color: rgba(255,255,255,0.6);
+      pointer-events: auto;
+    }
+
+    /* Speaker notes overlay */
+    .notes-overlay {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      max-height: 38vh;
+      background: rgba(16,32,44,0.96);
+      color: #FBFAF7;
+      padding: 1.25rem 2rem 1.5rem;
+      transform: translateY(100%);
+      transition: transform 0.25s ease-out;
+      z-index: 200;
+      border-top: 3px solid #3DCEB2;
+      overflow-y: auto;
+      font-family: "Jost", sans-serif;
+    }
+    .notes-overlay.is-visible { transform: translateY(0); }
+    .notes-eyebrow {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      color: #3DCEB2;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .notes-content {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      max-width: 80rem;
+    }
+    .notes-content strong { color: #3DCEB2; font-weight: 600; }
+    .notes-content ul { margin-left: 1.5rem; margin-top: 0.4rem; }
+    .notes-content li { margin-bottom: 0.3rem; }
+    .notes-content p + p { margin-top: 0.55rem; }
+    .notes-hint {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 0.85rem;
+    }
+
+    /* Footer brand mark on each slide */
+    .slide-brand {
+      position: absolute;
+      bottom: clamp(0.85rem, 1.5vh, 1.5rem);
+      left: clamp(1.5rem, 3vw, 3rem);
+      font-family: "Urbanist", sans-serif;
+      font-size: clamp(0.6rem, 0.85vw, 0.78rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(45,90,122,0.5);
+      font-weight: 600;
+    }
+    .slide--dark .slide-brand, .slide--navy .slide-brand, .slide--accent .slide-brand { color: rgba(255,255,255,0.4); }
+
+    /* Section divider — single big number + section name */
+    .section-divider {
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .section-divider .eyebrow {
+      font-size: clamp(1rem, 1.4vw, 1.3rem);
+      letter-spacing: 0.26em;
+      color: #3DCEB2;
+    }
+    .section-divider .title-big { font-size: clamp(3rem, 7vw, 6rem); color: white; }
+
+    /* Title slide */
+    .slide-title-cover .title-mega { font-size: clamp(4rem, 11vw, 11rem); color: white; line-height: 0.92; }
+    .slide-title-cover .body-text { color: rgba(255,255,255,0.78); font-size: clamp(1.3rem, 2vw, 1.85rem); margin-top: clamp(1.5rem, 3vh, 2.5rem); }
+    .slide-title-cover .body-small { color: rgba(255,255,255,0.5); margin-top: clamp(2rem, 4vh, 3rem); font-size: clamp(0.85rem, 1.1vw, 1.05rem); letter-spacing: 0.16em; text-transform: uppercase; }
+
+    /* Big single-question hook slide */
+    .hook-line {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.5rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.005em;
+    }
+    .hook-line .accent { color: #3DCEB2; }
+
+    /* Welcome to Helen slide-style emotional close */
+    .close-big {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 800;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 0.98;
+      color: white;
+      margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
+    }
+    .close-big .accent { color: #3DCEB2; }
+
+    /* Print fallback */
+    @media print {
+      .slide { display: block !important; page-break-after: always; min-height: 100vh; }
+      .deck-ui, .notes-overlay, .notes-window-root, .presenter-launch { display: none !important; }
+    }
+
+    /* ============================================================
+       PRESENTER NOTES WINDOW (opens via "Open Notes Window" button)
+       URL contains ?notes=1
+       ============================================================ */
+
+    .notes-window-root { display: none; }
+    body.is-notes-mode { background: #FBFAF7; overflow: auto; }
+    body.is-notes-mode .notes-window-root {
+      display: block;
+      max-width: 56rem;
+      margin: 0 auto;
+      padding: 2rem 2.5rem 3rem;
+      font-family: "Jost", sans-serif;
+      color: #34252F;
+      min-height: 100vh;
+    }
+    body.is-notes-mode .slide,
+    body.is-notes-mode .deck-ui { display: none !important; }
+
+    .nw-topbar {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding-bottom: 1.1rem;
+      border-bottom: 2px solid #2D5A7A;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .nw-brand {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #4B7797;
+    }
+    .nw-counter {
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #2D5A7A;
+      background: rgba(45,90,122,0.08);
+      padding: 0.35rem 0.7rem;
+      border-radius: 0.45rem;
+    }
+
+    .nw-eyebrow {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #3DCEB2;
+      margin-bottom: 0.45rem;
+    }
+    .nw-slide-title {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: 1.55rem;
+      color: #2D5A7A;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      max-width: 48rem;
+    }
+
+    .nw-content {
+      background: white;
+      border: 1px solid #D8E6E3;
+      border-left: 4px solid #3DCEB2;
+      border-radius: 0 0.6rem 0.6rem 0;
+      padding: 1.4rem 1.6rem 1.5rem;
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: #34252F;
+      box-shadow: 0 2px 8px rgba(45,90,122,0.06);
+    }
+    .nw-content strong { color: #2D5A7A; font-weight: 600; }
+    .nw-content ul { margin: 0.6rem 0 0.5rem 1.4rem; }
+    .nw-content li { margin-bottom: 0.45rem; }
+    .nw-content p + p, .nw-content p + ul, .nw-content ul + p { margin-top: 0.8rem; }
+    .nw-content .notes-eyebrow {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      color: #2D5A7A;
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+      display: block;
+    }
+    .nw-content .notes-content { font-size: 1.05rem; line-height: 1.65; }
+    .nw-content .notes-hint {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: #4B7797;
+      margin-top: 0.85rem;
+      padding-top: 0.7rem;
+      border-top: 1px dashed rgba(75,119,151,0.3);
+    }
+    .nw-empty {
+      font-style: italic;
+      color: #4B7797;
+      font-size: 0.95rem;
+    }
+
+    .nw-next {
+      margin-top: 1.5rem;
+      background: rgba(45,90,122,0.05);
+      border: 1px solid rgba(45,90,122,0.15);
+      border-radius: 0.5rem;
+      padding: 0.95rem 1.2rem;
+      font-size: 0.95rem;
+      color: #4B7797;
+      line-height: 1.5;
+    }
+    .nw-next-label {
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #2D5A7A;
+      margin-bottom: 0.3rem;
+    }
+    .nw-next-title { color: #2D5A7A; font-weight: 600; font-size: 1.02rem; }
+
+    .nw-nav {
+      display: flex;
+      gap: 0.7rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .nw-btn {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.65rem 1.1rem;
+      background: #2D5A7A;
+      color: white;
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 0.45rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .nw-btn:hover { background: #10202C; }
+    .nw-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .nw-btn-secondary {
+      background: white;
+      color: #2D5A7A;
+      border: 1.5px solid #D8E6E3;
+    }
+    .nw-btn-secondary:hover { border-color: #2D5A7A; background: rgba(45,90,122,0.04); }
+    .nw-keyhint {
+      margin-top: 1rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: #4B7797;
+    }
+
+    /* "Open Presenter Notes Window" launch button on main deck */
+    .presenter-launch {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.8rem;
+      background: rgba(0,0,0,0.55);
+      color: white;
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+      opacity: 0.6;
+    }
+    .presenter-launch:hover { opacity: 1; background: rgba(0,0,0,0.75); transform: translateY(-1px); }
+    .presenter-launch.is-connected { background: #3DCEB2; color: #10202C; opacity: 1; }
+    .presenter-launch.is-connected::before { content: "● "; }
+    body.is-notes-mode .presenter-launch { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ============ SLIDE 1 · TITLE COVER ============ -->
+  <section class="slide slide--dark slide-title-cover is-active" data-section="hook">
+    <div class="eyebrow">CPC · Team Rollout · 2026</div>
+    <h1 class="title-mega">UNL Ancillary.<br/>A new product line.<br/>A new income stream.</h1>
+    <p class="body-text">Today we're announcing the addition of UNL ancillary to your CPC toolkit. Next week we train. Then we sell.</p>
+    <p class="body-small">Clear Path Coverage</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~60 sec</div>
+      <div class="notes-content">
+        <p><strong>Open warmly.</strong> "Welcome — thanks for making time. Today is the announcement. We're rolling out a new product line that's going to change what your year looks like as a CPC agent. We're going to keep this high level — about an hour. Next Tuesday and Wednesday we go deep with UNL on the actual products."</p>
+        <ul>
+          <li>Frame the meeting: announcement today, training next week, selling soon after.</li>
+          <li>Set expectations: high-level, not deep-dive. They'll leave with the picture, not every detail.</li>
+          <li>Acknowledge co-presenter handoffs naturally as you go.</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 2 · HOOK ============ -->
+  <section class="slide" data-section="hook">
+    <div class="eyebrow">The opportunity</div>
+    <h2 class="hook-line">What if every month was <span class="accent">AEP-busy</span>?</h2>
+    <p class="body-text" style="margin-top: clamp(1.5rem, 3vh, 2.5rem);">Right now, your income lives and dies by enrollment periods. October through March is the peak. April through September is the dry stretch. Today we're going to fix that.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~90 sec</div>
+      <div class="notes-content">
+        <p><strong>This is the emotional hook.</strong> Every MA agent in the room knows the SEP-season income drop. Name it directly.</p>
+        <ul>
+          <li>"Show of hands — who feels the difference between January and April?" Pause for reaction.</li>
+          <li>"AEP is amazing. Then it ends. Then you wait. We've all felt it."</li>
+          <li>Set up the answer: "What if you didn't have to wait? What if every month had something to sell? That's what ancillary does. It has no enrollment codes. You can sell it 365 days a year."</li>
+          <li>Transition: "Let me introduce you to the carrier that makes that possible."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 3 · SECTION: MEET UNL ============ -->
+  <section class="slide slide--accent section-divider" data-section="meet-unl">
+    <div class="eyebrow">Section 1</div>
+    <h2 class="title-big">Meet UNL.</h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.78); margin-top: 1rem;">The carrier behind the products.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~20 sec transition</div>
+      <div class="notes-content">
+        <p>Quick transition slide. Pause briefly, then move on. "Quick intro on the carrier we're partnering with."</p>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 4 · WHO IS UNL ============ -->
+  <section class="slide" data-section="meet-unl">
+    <div class="eyebrow">The carrier</div>
+    <h2 class="title-big">United National Life.</h2>
+    <p class="body-text">Senior-focused ancillary insurance carrier. Decades in the senior market. Two flagship products you'll be writing:</p>
+    <div class="two-col">
+      <div class="col-card">
+        <div class="col-card-num">★</div>
+        <div class="col-card-title">Home Healthcare (HHC)</div>
+        <div class="col-card-body">Cash for in-home care, family caregiver support, prescription reimbursement. <strong>The main product.</strong> This is what most of your sales will be.</div>
+      </div>
+      <div class="col-card">
+        <div class="col-card-num">+</div>
+        <div class="col-card-title">Hospital Indemnity (HI)</div>
+        <div class="col-card-body">Cash on hospital days. <strong>The cross-sell.</strong> Sells alongside HHC and alongside MA when the customer has copay exposure.</div>
+      </div>
+    </div>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~90 sec</div>
+      <div class="notes-content">
+        <p><strong>Establish credibility + frame the product family.</strong></p>
+        <ul>
+          <li>UNL = United National Life Insurance Company. Senior market specialist.</li>
+          <li>We've vetted them carefully. Strong products, strong agent support, real demand from the senior market.</li>
+          <li>Two products — HHC is the main act, HI is the cross-sell. Both are <strong>indemnity</strong> products (pay cash to the customer, not to a hospital).</li>
+          <li>Don't go into knockouts, plan tiers, or pricing here — that's Tuesday/Wednesday training.</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 5 · SECTION: WHY ANCILLARY ============ -->
+  <section class="slide slide--accent section-divider" data-section="why-ancillary">
+    <div class="eyebrow">Section 2</div>
+    <h2 class="title-big">Why ancillary — why now.</h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.78); margin-top: 1rem;">Three structural reasons.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+  </section>
+
+  <!-- ============ SLIDE 6 · REASON 1 · CALENDAR ============ -->
+  <section class="slide" data-section="why-ancillary">
+    <div class="eyebrow">Reason 1 · It smooths your calendar</div>
+    <div style="display: flex; align-items: center; justify-content: center; flex-direction: column; flex: 1;">
+      <div class="hero-stat">365</div>
+      <p class="hero-stat-sub">Days a year you can sell ancillary.</p>
+    </div>
+    <p class="body-text" style="margin: 0 auto; text-align: center; max-width: 50rem;"><strong>Ancillary has no enrollment-period gates.</strong> No AEP. No OEP. No SEP. No election windows. Whether it's January or July, the product is sellable. The income gap most MA agents feel from April through September? Ancillary fills it.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~75 sec</div>
+      <div class="notes-content">
+        <p><strong>Lead with the calendar pain.</strong> This is the #1 reason most agents will care.</p>
+        <ul>
+          <li>"You all know the MA calendar. AEP is full throttle. OEP is decent. SEP is feast-or-famine. And then there's the long stretch where you're waiting."</li>
+          <li>"Ancillary doesn't care about election periods. There are no codes. A customer doesn't need a qualifying event to buy. They just need to want the coverage."</li>
+          <li>"That means you can dial leads any day of the year. You can build pipeline in February. You can close in July."</li>
+          <li>Land the point: "Your SEP-season income drop is a calendar problem. Ancillary is the calendar fix."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 7 · REASON 2 · STABILITY ============ -->
+  <section class="slide" data-section="why-ancillary">
+    <div class="eyebrow">Reason 2 · It's structurally stable</div>
+    <div style="display: flex; align-items: center; justify-content: center; flex-direction: column; flex: 1;">
+      <div class="hero-stat">0</div>
+      <p class="hero-stat-sub">Impact from CMS rule changes.</p>
+    </div>
+    <p class="body-text" style="margin: 0 auto; text-align: center; max-width: 52rem;">When CMS shifts the rules, when a carrier exits a market, when commission schedules change — your MA commissions are exposed. <strong>Ancillary is state-regulated indemnity</strong> — it lives in a different regulatory world. When the ground shifts, your ancillary book stays put.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~60 sec</div>
+      <div class="notes-content">
+        <p><strong>Speak to recent pain from CMS volatility.</strong></p>
+        <ul>
+          <li>"How many of you have had a CMS rule change affect how you do business in the last 2 years?" (Most hands.)</li>
+          <li>"Ancillary isn't a Medicare product. It's a state-regulated indemnity product. Same customer base, totally different regulatory framework."</li>
+          <li>"When the next CMS rule lands — and there will be one — your ancillary book is unaffected."</li>
+          <li>Transition: "And on top of being stable, the commission structure itself is different."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 8 · REASON 3 · RENEWALS ============ -->
+  <section class="slide" data-section="why-ancillary">
+    <div class="eyebrow">Reason 3 · It pays renewal commissions</div>
+    <div style="display: flex; align-items: center; justify-content: center; flex-direction: column; flex: 1;">
+      <div class="hero-stat">5%</div>
+      <p class="hero-stat-sub">Annual renewal commission — every year the policy stays in force.</p>
+    </div>
+    <p class="body-text" style="margin: 0 auto; text-align: center; max-width: 54rem;">MA at CPC pays upfront only. <strong>Ancillary pays you upfront AND a 5% renewal every year</strong> the policy is active. Sell one in Year 1, keep collecting on it in Years 2, 3, 4. Your renewal income compounds as new cohorts stack on top.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~75 sec</div>
+      <div class="notes-content">
+        <p><strong>This is the structural sales-economics point. It lands hard.</strong></p>
+        <ul>
+          <li>"On MA, you're paid an upfront commission. That's it. The book belongs to CPC."</li>
+          <li>"On ancillary, you're paid upfront PLUS a renewal commission every year the policy stays in force. The 5% may sound small — multiply it across hundreds of policies and several years of selling, and it adds up."</li>
+          <li>"Sell 200 policies this year, you get the upfront 25%. Next year you collect 5% renewal on all 200. Year after, same thing on those plus the new ones. That compounding is what builds long-term income."</li>
+          <li>"We'll show this live in the Comp Model calculator in a few minutes."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 9 · THREE REASONS TOGETHER ============ -->
+  <section class="slide" data-section="why-ancillary">
+    <div class="eyebrow">Three reasons, one opportunity</div>
+    <h2 class="title-mid">Calendar. Stability. Renewals.</h2>
+    <div class="three-col">
+      <div class="col-card">
+        <div class="col-card-num">1</div>
+        <div class="col-card-title">365-day sellable</div>
+        <div class="col-card-body">No enrollment codes. Smooths your calendar from January to October.</div>
+      </div>
+      <div class="col-card">
+        <div class="col-card-num">2</div>
+        <div class="col-card-title">CMS-resilient</div>
+        <div class="col-card-body">State-regulated indemnity. Insulated from Medicare rule shifts and carrier exits.</div>
+      </div>
+      <div class="col-card">
+        <div class="col-card-num">3</div>
+        <div class="col-card-title">Renewal commissions</div>
+        <div class="col-card-body">25% upfront + 5% every year the policy stays in force. Income that compounds.</div>
+      </div>
+    </div>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~30 sec</div>
+      <div class="notes-content">
+        <p>Recap the three reasons quickly. Don't restate everything — just anchor them.</p>
+        <p>"Calendar. Stability. Renewals. Three structural reasons this is the right product line to add right now."</p>
+        <p>Transition: "But none of that matters if the customer doesn't actually need what we're selling. So let's talk about why the customer needs this."</p>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 10 · SECTION: CUSTOMER'S GAP ============ -->
+  <section class="slide slide--accent section-divider" data-section="customer-gap">
+    <div class="eyebrow">Section 3</div>
+    <h2 class="title-big">The gap.</h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.78); margin-top: 1rem;">Why this product matters to the customer.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+  </section>
+
+  <!-- ============ SLIDE 11 · THE GAP DIAGRAM ============ -->
+  <section class="slide" data-section="customer-gap">
+    <div class="eyebrow">The structural hole in Medicare coverage</div>
+    <h2 class="title-mid">Medicare covers medical care. Nothing covers daily-living care.</h2>
+    <table class="gap-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Medical care<br/><span style="font-weight: 500; font-size: 0.7em; opacity: 0.7;">skilled, recovery</span></th>
+          <th>Daily-living care<br/><span style="font-weight: 500; font-size: 0.7em; opacity: 0.7;">bathing, dressing, custodial</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Original Medicare</td><td class="covered">✓ Covered</td><td class="notcovered">✕ NOT covered</td></tr>
+        <tr><td>Medicare + Medigap</td><td class="covered">✓ Covered</td><td class="notcovered">✕ NOT covered</td></tr>
+        <tr><td>Medicare Advantage</td><td class="covered">✓ Covered</td><td class="notcovered">✕ NOT covered (~93% of plans)</td></tr>
+        <tr class="unl-row"><td>UNL Home Healthcare</td><td class="covered">✓ Pays cash too</td><td class="covered">✓ COVERED</td></tr>
+      </tbody>
+    </table>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~2 min — emotional center of the meeting</div>
+      <div class="notes-content">
+        <p><strong>This is the slide where the customer's problem clicks.</strong> Take your time.</p>
+        <ul>
+          <li>"Here's the structural gap. Look at the right column."</li>
+          <li>"Medicare covers medical care indefinitely. So does Medigap. So does Medicare Advantage. They're all covered when grandma needs skilled care — a nurse, a therapy visit, recovery after a hospital stay."</li>
+          <li>"But daily-living help — bathing, dressing, getting to the bathroom, the kind of help an aging person actually needs day-to-day — none of those plans cover it. Not Medicare, not Medigap, not 93% of MA plans."</li>
+          <li>"That's the gap. UNL fills it. That's the whole product."</li>
+          <li>Use the customer story: "Imagine your prospect's mom has a stroke. Medicare pays for the hospital, the rehab, the home health nurse who comes for a few visits. But three months in, when she just needs help getting dressed every morning? Medicare's done. The family pays $77,000 a year out of pocket. UNL is the policy that pays the family cash to do that. That's the sale."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 12 · THE SCALE ============ -->
+  <section class="slide" data-section="customer-gap">
+    <div class="eyebrow">The scale of the problem</div>
+    <div class="two-col" style="margin-top: 0; align-items: center; flex: 1;">
+      <div style="text-align: center;">
+        <div class="hero-stat" style="font-size: clamp(6rem, 14vw, 14rem);">70%</div>
+        <p class="hero-stat-sub" style="margin-top: 1rem;">Of people 65+ will need help at home at some point.</p>
+      </div>
+      <div style="text-align: center;">
+        <div class="hero-stat" style="font-size: clamp(5rem, 11vw, 11rem); background: linear-gradient(135deg, #C97A1F 0%, #8B5413 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">$77K/yr</div>
+        <p class="hero-stat-sub" style="margin-top: 1rem;">Median home health aide cost — Medicare pays $0 of it.</p>
+      </div>
+    </div>
+    <p class="body-small" style="text-align: center; margin-top: clamp(1.5rem, 3vh, 2.5rem);">HHS ASPE: 70% lifetime need for extended help at home · ~20% need 5+ years · Genworth/CareScout 2024 cost data</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~60 sec</div>
+      <div class="notes-content">
+        <p><strong>Quantify the gap. Two numbers, both verifiable.</strong></p>
+        <ul>
+          <li>"70% of seniors are going to face this. That's not a fringe market — that's most of your book."</li>
+          <li>"$77,000 a year median cost. That's brutal. And Medicare pays zero dollars of it when it's custodial."</li>
+          <li>"This is a real need. Your prospects aren't going to push back hard on 'do you need this' — most of them know someone whose family went through it."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 13 · UNL FILLS THE GAP ============ -->
+  <section class="slide slide--accent" data-section="customer-gap">
+    <div class="eyebrow">The product that fills the gap</div>
+    <h2 class="close-big">UNL Home Healthcare<br/><span class="accent">is the answer.</span></h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.78); max-width: 50rem;">Cash for the home care Medicare won't pay for. Cash to the family member who provides that care. A prescription benefit that funds most of the premium. Care coordination from day one.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~30 sec</div>
+      <div class="notes-content">
+        <p>Transition slide. Punctuate the moment.</p>
+        <p>"That gap we just talked about? UNL Home Healthcare is the product that fills it. Let's break down what's actually in it."</p>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 14 · SECTION: HHC ============ -->
+  <section class="slide slide--accent section-divider" data-section="hhc">
+    <div class="eyebrow">Section 4</div>
+    <h2 class="title-big">Home Healthcare (HHC).</h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.78); margin-top: 1rem;">The main product. What it is, what it pays, who it's for.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+  </section>
+
+  <!-- ============ SLIDE 15 · HHC FOUR BENEFITS ============ -->
+  <section class="slide" data-section="hhc">
+    <div class="eyebrow">HHC bundles four benefits</div>
+    <h2 class="title-mid">One policy. Four things it does.</h2>
+    <div class="quad">
+      <div class="col-card">
+        <div class="col-card-num">1</div>
+        <div class="col-card-title">Daily home-care benefit</div>
+        <div class="col-card-body">Cash paid for skilled nursing, therapies, and home health aides — up to <strong>360 days</strong> when the policy is in force.</div>
+      </div>
+      <div class="col-card">
+        <div class="col-card-num">2</div>
+        <div class="col-card-title">$3,500 caregiver lump</div>
+        <div class="col-card-body">Paid directly to a <strong>family member</strong> providing care. Up to 2× per lifetime. <em>No competitor pays this.</em></div>
+      </div>
+      <div class="col-card">
+        <div class="col-card-num">3</div>
+        <div class="col-card-title">Rx reimbursement</div>
+        <div class="col-card-body">$10 per generic fill, $25 per brand fill — capped by plan tier. Pays regardless of what the pharmacy charges.</div>
+      </div>
+      <div class="col-card">
+        <div class="col-card-num">4</div>
+        <div class="col-card-title">TCare support</div>
+        <div class="col-card-body">Care assessment, written plan, vetted referrals, 3-month follow-up. Built into every policy.</div>
+      </div>
+    </div>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~2-3 min</div>
+      <div class="notes-content">
+        <p><strong>Walk through each benefit. The $3,500 caregiver lump is the standout — emphasize it.</strong></p>
+        <ul>
+          <li><strong>Benefit 1:</strong> "The daily benefit kicks in when the customer needs care at home. Up to 360 days of coverage. Plan tier determines the daily amount — Plan A is $150/day, Plan B is $300/day, Plan C is $450/day."</li>
+          <li><strong>Benefit 2:</strong> "This is the standout. $3,500 paid directly to a family caregiver. Not a third-party agency — actual family. If grandma needs help and her daughter steps up, the policy writes a check to the daughter. Up to twice in a lifetime, so $7,000 total max. No other senior ancillary product does this."</li>
+          <li><strong>Benefit 3:</strong> "$10 per generic fill, $25 per brand fill. Capped annually by plan tier — $300 / $600 / $900. This is the part that makes the math work for the customer. We'll see it in 5 minutes."</li>
+          <li><strong>Benefit 4:</strong> "TCare is the support layer — care planning, referrals, follow-up. Built in, no extra cost. Improves the actual outcome and improves your retention."</li>
+        </ul>
+        <p class="notes-hint">Don't get into knockouts, plan tier specifics, or pricing here. That's Wed/Fri training.</p>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 16 · HHC PLANS ============ -->
+  <section class="slide" data-section="hhc">
+    <div class="eyebrow">Three plan tiers</div>
+    <h2 class="title-mid">Plan A · Plan B · Plan C</h2>
+    <div class="three-col" style="margin-top: clamp(1.5rem, 3vh, 2.5rem);">
+      <div class="col-card">
+        <div class="col-card-num">A</div>
+        <div class="col-card-title">$50,000 coverage</div>
+        <div class="col-card-body" style="margin-bottom: 0.5rem;"><strong style="color:#2D5A7A;">$150/day</strong> daily benefit<br/><strong style="color:#2D5A7A;">$300/yr</strong> Rx cap</div>
+        <div class="body-small" style="margin-top: 0.85rem;">Best fit: 3 generics monthly or fewer</div>
+      </div>
+      <div class="col-card" style="border-color: #3DCEB2; background: rgba(61,206,178,0.08);">
+        <div class="col-card-num" style="color:#2D5A7A;">B</div>
+        <div class="col-card-title">$100,000 coverage</div>
+        <div class="col-card-body" style="margin-bottom: 0.5rem;"><strong style="color:#2D5A7A;">$300/day</strong> daily benefit<br/><strong style="color:#2D5A7A;">$600/yr</strong> Rx cap</div>
+        <div class="body-small" style="margin-top: 0.85rem;">Best fit: 3 generics + 1 brand monthly · <strong style="color:#2D5A7A;">most common fit</strong></div>
+      </div>
+      <div class="col-card">
+        <div class="col-card-num">C</div>
+        <div class="col-card-title">$150,000 coverage</div>
+        <div class="col-card-body" style="margin-bottom: 0.5rem;"><strong style="color:#2D5A7A;">$450/day</strong> daily benefit<br/><strong style="color:#2D5A7A;">$900/yr</strong> Rx cap</div>
+        <div class="body-small" style="margin-top: 0.85rem;">Best fit: heavy Rx load or specific risk profile</div>
+      </div>
+    </div>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~75 sec</div>
+      <div class="notes-content">
+        <p>"Three plan tiers. Bigger tier = bigger daily benefit + bigger Rx reimbursement cap + bigger premium."</p>
+        <ul>
+          <li>"Plan B is the most common fit by a wide margin. Three generics plus a brand is a typical senior medication profile."</li>
+          <li>"You'll pick the right tier based on the customer's actual prescriptions. There's a calculator for this — we'll show it in a few minutes."</li>
+          <li>"Don't get hung up on memorizing tiers. The math is mechanical — type in the meds, see the right tier."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 17 · HHC TRIGGER ============ -->
+  <section class="slide" data-section="hhc">
+    <div class="eyebrow">When the policy pays — the trigger</div>
+    <div style="display: flex; flex-direction: column; justify-content: center; flex: 1;">
+      <h2 class="title-big" style="font-size: clamp(2rem, 4vw, 3.5rem); max-width: 60rem;">Inability to perform <strong style="color: #3DCEB2;">2 of 6 ADLs</strong> — bathing, continence, dressing, eating, toileting, transferring — <strong>OR</strong> cognitive impairment.</h2>
+      <p class="body-text" style="margin-top: clamp(1.5rem, 3vh, 2.5rem); max-width: 60rem;"><strong>No homebound test. No prior hospitalization. No skilled-care need.</strong> The trigger is exactly the threshold Medicare won't pay on. That alignment is why this product works.</p>
+    </div>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~60 sec</div>
+      <div class="notes-content">
+        <p><strong>This is the part that earns trust from skeptical agents.</strong></p>
+        <ul>
+          <li>"The trigger is 2 of 6 ADLs — Activities of Daily Living — or cognitive impairment."</li>
+          <li>"What it ISN'T is just as important. There's no homebound test like Medicare has. No requirement that they were in the hospital first. No skilled-care need."</li>
+          <li>"The trigger is precisely calibrated to the daily-living-help gap we just talked about. Medicare's threshold is 'skilled.' UNL's threshold is 'they need help with the basics.' That alignment is what makes the product actually pay when families need it."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 18 · SECTION: HI ============ -->
+  <section class="slide slide--accent section-divider" data-section="hi">
+    <div class="eyebrow">Section 5</div>
+    <h2 class="title-big">Hospital Indemnity (HI).</h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.78); margin-top: 1rem;">The cross-sell to HHC. The natural attach on MA calls.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+  </section>
+
+  <!-- ============ SLIDE 19 · WHAT HI DOES ============ -->
+  <section class="slide" data-section="hi">
+    <div class="eyebrow">What HI does</div>
+    <div style="display: flex; align-items: center; justify-content: center; flex-direction: column; flex: 1;">
+      <div class="hero-stat" style="font-size: clamp(5rem, 11vw, 11rem);">$100&ndash;$750<span style="font-size: 0.5em; opacity: 0.7;">/day</span></div>
+      <p class="hero-stat-sub">Cash to the customer, every day they're hospitalized.</p>
+    </div>
+    <p class="body-text" style="margin: 0 auto; text-align: center; max-width: 56rem;">When your MA customer gets admitted, their plan still leaves them with a $200–$400 daily copay for the first week. HI pays them <strong>cash</strong> — directly — to cover that gap. They use it however they want.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~60 sec</div>
+      <div class="notes-content">
+        <p><strong>Frame HI as "completing the coverage" not "another sale."</strong></p>
+        <ul>
+          <li>"This one's simpler. Hospital indemnity pays cash for each day the customer is hospitalized."</li>
+          <li>"Your MA customer? They've still got hospital copay exposure. Most MA plans have $200-$400/day for the first week of any stay. That's $1,400 surprise medical bill the moment they're admitted."</li>
+          <li>"HI pays them cash to cover it. Direct to them. No reimbursement, no claim drama — flat per-day cash."</li>
+          <li>"This is the natural cross-sell on every MA call where the customer has copay exposure. Same call, same SOA, same close."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 20 · HI TWO VARIANTS ============ -->
+  <section class="slide" data-section="hi">
+    <div class="eyebrow">Two variants — pick the one that fits</div>
+    <h2 class="title-mid">GI HI Shield · HI Shield 2.0</h2>
+    <div class="two-col" style="margin-top: clamp(1.5rem, 3vh, 2.5rem);">
+      <div class="col-card">
+        <div class="col-card-num">★</div>
+        <div class="col-card-title">GI HI Shield</div>
+        <div class="col-card-body" style="margin-bottom: 0.85rem;"><strong style="color:#2D5A7A;">Ages 50–85</strong><br/><strong style="color:#2D5A7A;">$100–$450/day</strong> daily benefit<br/>No health questions — <strong>guaranteed issue</strong></div>
+        <div class="body-small">The pivot when a prospect knocks out of HI Shield 2.0. Looser underwriting = wider eligible market.</div>
+      </div>
+      <div class="col-card">
+        <div class="col-card-num">+</div>
+        <div class="col-card-title">HI Shield 2.0</div>
+        <div class="col-card-body" style="margin-bottom: 0.85rem;"><strong style="color:#2D5A7A;">Ages 64–85</strong><br/><strong style="color:#2D5A7A;">$100–$750/day</strong> daily benefit<br/>Medically underwritten</div>
+        <div class="body-small">Higher daily benefit ceiling. Best for reasonably healthy seniors with no recent major events.</div>
+      </div>
+    </div>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~45 sec</div>
+      <div class="notes-content">
+        <p>"Two variants. Most customers will qualify for at least one."</p>
+        <ul>
+          <li>"GI HI Shield is the safety net. No health questions. If the customer can't get through underwriting on 2.0, this one almost always works."</li>
+          <li>"HI Shield 2.0 has the higher daily ceiling — up to $750/day — but it's medically underwritten."</li>
+          <li>"You'll learn the underwriting questions and the pivot move at next Tuesday's HI training."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 21 · SECTION: THE MATH ============ -->
+  <section class="slide slide--accent section-divider" data-section="the-math">
+    <div class="eyebrow">Section 6</div>
+    <h2 class="title-big">The math that closes.</h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.78); margin-top: 1rem;">Why this product almost sells itself.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+  </section>
+
+  <!-- ============ SLIDE 22 · THE MATH (John example) ============ -->
+  <section class="slide" data-section="the-math">
+    <div class="eyebrow">Why your prospects will say yes</div>
+    <h2 class="title-mid">John · 67 · 3 generics + 1 brand monthly · Plan B</h2>
+    <div class="math-rows">
+      <div class="math-row">
+        <span class="math-label">Plan B premium</span>
+        <span class="math-val">$53.35/mo</span>
+      </div>
+      <div class="math-row">
+        <span class="math-label">Rx reimbursement (3 gen × $10 + 1 brand × $25 = $55/mo, capped at $600/yr)</span>
+        <span class="math-val">−$50/mo</span>
+      </div>
+      <div class="math-row is-final">
+        <span class="math-label">John's real out-of-pocket</span>
+        <span class="math-val">$3.35/mo</span>
+      </div>
+    </div>
+    <p class="body-text" style="text-align: center; margin: clamp(1.5rem, 3vh, 2.5rem) auto 0;">For about <strong>one fast-food meal a month</strong>, John gets $100,000 in home healthcare coverage, $300/day daily benefit, $3,500 to a family caregiver, and care coordination on top.</p>
+    <p style="text-align: center; margin-top: clamp(1rem, 2vh, 1.5rem);"><a href="https://clearpathcoverage.com/unl-rx-calculator/" target="_blank" rel="noopener" class="cta">▶ Demo the Rx Calculator live</a></p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~3 min — INCLUDES LIVE DEMO</div>
+      <div class="notes-content">
+        <p><strong>This is the magic moment. Take your time. Live-demo the Rx Calculator.</strong></p>
+        <ul>
+          <li>"Here's why this is the easiest product you'll ever sell."</li>
+          <li>Walk the math out loud: "Premium $53. Reimbursement $50. Real out-of-pocket: about three bucks a month. For $100,000 in coverage and a $3,500 caregiver payment."</li>
+          <li><strong>Click "Demo the Rx Calculator live."</strong> Plug in John's meds (3 generics monthly, 1 brand monthly). Let agents watch the tier recommendation populate. Click between tiers to show how Plan B is the sweet spot.</li>
+          <li>Land the close: "When you tell a prospect on a call 'this costs you three dollars a month and covers you for a hundred grand' — that's not selling. That's just saying the math out loud."</li>
+          <li><strong>This is where the 'I can totally sell this' click happens.</strong> Watch faces.</li>
+        </ul>
+        <p class="notes-hint">If the live demo doesn't work, fall back: walk through the math on the slide and emphasize "we'll all play with this tool next week."</p>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 23 · SECTION: WHAT YOU EARN ============ -->
+  <section class="slide slide--accent section-divider" data-section="income">
+    <div class="eyebrow">Section 7</div>
+    <h2 class="title-big">What you'll earn.</h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.78); margin-top: 1rem;">The commission structure, the lead costs, the realistic income range.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+  </section>
+
+  <!-- ============ SLIDE 24 · THE BASICS ============ -->
+  <section class="slide" data-section="income">
+    <div class="eyebrow">The commission structure</div>
+    <h2 class="title-mid">Two numbers to remember.</h2>
+    <div class="two-col" style="align-items: center; flex: 1;">
+      <div style="text-align: center;">
+        <div class="hero-stat" style="font-size: clamp(6rem, 14vw, 14rem);">25%</div>
+        <p class="hero-stat-sub" style="margin-top: 1rem;">Year 1 commission</p>
+        <p class="body-small" style="margin-top: 0.5rem; text-align: center; max-width: 24rem; margin-left: auto; margin-right: auto;">Of annual premium. On a typical $780/yr HHC policy, that's <strong style="color:#2D5A7A;">$195</strong> per Year 1 sale.</p>
+      </div>
+      <div style="text-align: center;">
+        <div class="hero-stat" style="font-size: clamp(6rem, 14vw, 14rem);">5%</div>
+        <p class="hero-stat-sub" style="margin-top: 1rem;">Annual renewal</p>
+        <p class="body-small" style="margin-top: 0.5rem; text-align: center; max-width: 24rem; margin-left: auto; margin-right: auto;">Every year the policy stays in force. <strong style="color:#2D5A7A;">$39/yr</strong> on the same policy — and the renewal stream compounds across cohorts.</p>
+      </div>
+    </div>
+    <div style="background: rgba(45,90,122,0.05); border-left: 3px solid #3DCEB2; border-radius: 0 0.5rem 0.5rem 0; padding: clamp(0.95rem, 1.8vh, 1.3rem) clamp(1.25rem, 2vw, 1.65rem); max-width: 64rem; margin: clamp(1.5rem, 2.5vh, 2rem) auto 0;">
+      <p class="body-small" style="margin: 0; font-size: clamp(0.95rem, 1.25vw, 1.15rem); line-height: 1.6;">
+        <strong style="color:#2D5A7A;">Why the $780 average matters.</strong> HI runs around $400/yr typical. HHC averages closer to $780/yr because the built-in Rx reimbursement lets us write a richer benefit while still giving the customer significant premium relief — they get $10 per generic, $25 per brand back every month. Bigger premium for the agent. More cash back to the customer. <strong style="color:#2D5A7A;">And because customers use the Rx benefit every month, retention is materially higher than HI alone.</strong>
+      </p>
+    </div>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~90 sec</div>
+      <div class="notes-content">
+        <ul>
+          <li>"25% of annual premium upfront. 5% renewal every year the policy stays in force."</li>
+          <li>"Typical premium is $780 a year on HHC. So $195 per sale upfront, $39 per year in renewal on each policy."</li>
+          <li>"Quick context on the $780 — HI policies typically run around $400/yr. HHC is closer to $780 because the Rx reimbursement supports a richer benefit. Customer pays more, but they get most of it back monthly through the Rx benefit. It's a win on both sides — bigger commission for you, real premium relief for the customer."</li>
+          <li>"And because the customer is using the Rx benefit every single month, they stay engaged. Retention on HHC is materially higher than HI alone. Better retention = more compounding renewal income for you."</li>
+          <li>"$39 per policy times 200 policies after a year of selling = $7,800/yr of renewal income. After 4 years of consistent selling, you're collecting renewals on every cohort simultaneously. It builds."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 25 · CPC COVERS LEADS ============ -->
+  <section class="slide" data-section="income">
+    <div class="eyebrow">Lead costs</div>
+    <div style="display: flex; align-items: center; justify-content: center; flex-direction: column; margin: clamp(1rem, 2vh, 1.5rem) 0;">
+      <div class="hero-stat" style="font-size: clamp(6rem, 14vw, 14rem);">$0</div>
+      <p class="hero-stat-sub">From your commission on ancillary-led leads.</p>
+    </div>
+    <div class="two-col" style="max-width: 68rem; margin: clamp(1rem, 2vh, 1.5rem) auto 0; align-items: stretch;">
+      <div class="col-card">
+        <div class="col-card-num">MA</div>
+        <div class="col-card-title">Regular MA leads</div>
+        <div class="col-card-body"><strong>Your cost</strong>, same as today. You can still cross-sell ancillary on those calls (compliantly — see Tuesday's training for the SOA rules).</div>
+      </div>
+      <div class="col-card" style="border-color: #3DCEB2; background: rgba(61,206,178,0.08);">
+        <div class="col-card-num" style="color: #2D5A7A;">Ancillary</div>
+        <div class="col-card-title">Ancillary-led leads</div>
+        <div class="col-card-body">Where you <strong>must lead with ancillary</strong> (not Medicare) — <strong style="color:#2D5A7A;">CPC covers the lead cost 100%.</strong> No deduction, no reimbursement out of your commission.</div>
+      </div>
+    </div>
+    <p class="body-small" style="margin: clamp(1rem, 2vh, 1.5rem) auto 0; text-align: center; max-width: 58rem;">Cross-selling is allowed in either direction — it just has to be done compliantly. We'll cover the SOA mechanics next Tuesday.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~75 sec</div>
+      <div class="notes-content">
+        <p><strong>This is the recruiting differentiator on the ancillary side — but be precise about which leads.</strong></p>
+        <ul>
+          <li>"Quick clarification on lead costs because there's a nuance worth understanding."</li>
+          <li><strong>"Your regular MA leads — same deal as today.</strong> You pay for those out of pocket. That hasn't changed. You can absolutely cross-sell ancillary on those calls, compliantly, but the lead cost is on you."</li>
+          <li><strong>"Where CPC covers 100% of the cost is on ancillary-led leads</strong> — where the customer came in through an ancillary funnel and you have to lead with ancillary, not Medicare. Those leads cost us money, but we cover them. You take home the full 25% and 5%."</li>
+          <li>"Cross-selling works in either direction, but the compliance flow matters. MA → ancillary on the same call is fine if your SOA covers both. Ancillary → MA same-call is NOT allowed — that has to be a separate call with a fresh SOA. We'll go deep on this Tuesday."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 26 · INCOME TIERS ============ -->
+  <section class="slide" data-section="income">
+    <div class="eyebrow">Realistic annual income at different paces</div>
+    <h2 class="title-mid">Where can this take you?</h2>
+    <div class="schedule-grid" style="grid-template-columns: repeat(4, 1fr); margin-top: clamp(1.5rem, 3vh, 2.5rem);">
+      <div class="col-card" style="text-align: center;">
+        <div class="eyebrow" style="margin-bottom: 0.5rem;">Building</div>
+        <div class="col-card-num" style="font-size: clamp(1.8rem, 3vw, 2.5rem);">1/day</div>
+        <div class="body-small" style="margin: 0.5rem 0;">Learning the script, part-time pace</div>
+        <div class="col-card-title" style="font-size: clamp(1.2rem, 1.8vw, 1.65rem); margin-top: 0.85rem;">~$32K Y1</div>
+        <div class="body-small" style="margin-top: 0.25rem;">~$45K Y5</div>
+      </div>
+      <div class="col-card" style="text-align: center;">
+        <div class="eyebrow" style="margin-bottom: 0.5rem;">Steady</div>
+        <div class="col-card-num" style="font-size: clamp(1.8rem, 3vw, 2.5rem);">2/day</div>
+        <div class="body-small" style="margin: 0.5rem 0;">Consistent daily volume, full-time</div>
+        <div class="col-card-title" style="font-size: clamp(1.2rem, 1.8vw, 1.65rem); margin-top: 0.85rem;">~$63K Y1</div>
+        <div class="body-small" style="margin-top: 0.25rem;">~$90K Y5</div>
+      </div>
+      <div class="col-card" style="text-align: center;">
+        <div class="eyebrow" style="margin-bottom: 0.5rem;">Strong</div>
+        <div class="col-card-num" style="font-size: clamp(1.8rem, 3vw, 2.5rem);">3/day</div>
+        <div class="body-small" style="margin: 0.5rem 0;">Practiced closer, full pipeline</div>
+        <div class="col-card-title" style="font-size: clamp(1.2rem, 1.8vw, 1.65rem); margin-top: 0.85rem;">~$94K Y1</div>
+        <div class="body-small" style="margin-top: 0.25rem;">~$135K Y5</div>
+      </div>
+      <div class="col-card" style="text-align: center; border-color: #3DCEB2; background: rgba(61,206,178,0.08);">
+        <div class="eyebrow" style="margin-bottom: 0.5rem; color: #2D5A7A;">Top Performer</div>
+        <div class="col-card-num" style="font-size: clamp(1.8rem, 3vw, 2.5rem); color: #2D5A7A;">5/day</div>
+        <div class="body-small" style="margin: 0.5rem 0;">Specialist, optimized funnel</div>
+        <div class="col-card-title" style="font-size: clamp(1.2rem, 1.8vw, 1.65rem); margin-top: 0.85rem;">~$157K Y1</div>
+        <div class="body-small" style="margin-top: 0.25rem;">~$225K Y5</div>
+      </div>
+    </div>
+    <p class="body-small" style="text-align: center; margin-top: clamp(1.5rem, 2.5vh, 2rem);">Assumes typical $780 premium · 80% placement rate · 80% Y1 retention · 85% Y2+ renewals retention · standard-state commission rates</p>
+    <p style="text-align: center; margin-top: clamp(0.5rem, 1vh, 1rem);"><a href="https://clearpathcoverage.com/unl-ancillary-agent-compensation/" target="_blank" rel="noopener" class="cta">▶ Demo the Comp Model live</a></p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~3 min — INCLUDES LIVE DEMO</div>
+      <div class="notes-content">
+        <p><strong>Show the tier card. Then open Comp Model live and slide through the assumptions.</strong></p>
+        <ul>
+          <li>"Four tiers. One sale a day, two, three, five-plus."</li>
+          <li>"Building agent — one sale a day, you'll do about $32K Year 1. After 5 years of consistent work, you're at around $45K — the difference is the renewal stack."</li>
+          <li>"Steady — two a day, $63K Y1, $90K Y5."</li>
+          <li>"Strong — three a day, you're in the $90s in Y1 and over $130K by Y5."</li>
+          <li>"Top performer territory — five-plus a day — you're at $150K-plus in Year 1 and well over $200K by Year 5."</li>
+          <li><strong>Click the Comp Model demo link.</strong> Slide through sales/day. Slide through retention. Show what happens at different premiums. Let it sink in.</li>
+          <li>"And remember — this is ON TOP OF your MA income. Not instead of."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 27 · SECTION: TRAINING + TOOLS ============ -->
+  <section class="slide slide--accent section-divider" data-section="training">
+    <div class="eyebrow">Section 8</div>
+    <h2 class="title-big">Training + tools.</h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.78); margin-top: 1rem;">How you go from "I get it" to "I'm selling."</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+  </section>
+
+  <!-- ============ SLIDE 28 · TRAINING SCHEDULE ============ -->
+  <section class="slide" data-section="training">
+    <div class="eyebrow">Next week — UNL ancillary training</div>
+    <h2 class="title-mid">Three deep-dive sessions. Block the time.</h2>
+    <div class="schedule-grid">
+      <div class="day-card is-rest">
+        <div class="day-card-day">Monday</div>
+        <div class="day-card-content">—</div>
+      </div>
+      <div class="day-card is-active">
+        <div class="day-card-day">Tuesday</div>
+        <div class="day-card-content">Hospital Indemnity</div>
+        <div class="day-card-sub">Products, knockouts, sales flow</div>
+      </div>
+      <div class="day-card is-active">
+        <div class="day-card-day">Wednesday</div>
+        <div class="day-card-content">Home Healthcare</div>
+        <div class="day-card-sub">Plans, trigger, application walkthrough</div>
+      </div>
+      <div class="day-card is-rest">
+        <div class="day-card-day">Thursday</div>
+        <div class="day-card-content">—</div>
+      </div>
+      <div class="day-card is-active">
+        <div class="day-card-day">Friday</div>
+        <div class="day-card-content">Home Healthcare</div>
+        <div class="day-card-sub">Role play, scenarios, objections</div>
+      </div>
+    </div>
+    <p class="body-text" style="text-align: center; margin-top: clamp(2rem, 4vh, 3rem); max-width: 60rem; margin-left: auto; margin-right: auto;">Hosted by FYM — our UNL ancillary training partner. Live, interactive. Product details, application submission, sales role-play. <strong>This is where you go from understanding to being able to sell.</strong></p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~90 sec</div>
+      <div class="notes-content">
+        <ul>
+          <li>"Three sessions next week. Tuesday is HI day. Wednesday and Friday are HHC days."</li>
+          <li>"These are hosted by FYM, our UNL ancillary training partner. They know the product inside out and run great agent trainings — we're leveraging their sessions for our team."</li>
+          <li>"We'll cover product details, knockout questions, application submission, and live sales role-play. Real practice before you make your first call."</li>
+          <li>"Block the time on your calendar today. Attendance matters — this is where you go from understanding to selling."</li>
+          <li>Add the actual times and Zoom links here before presenting.</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 29 · THE 4-TOOL ECOSYSTEM ============ -->
+  <section class="slide" data-section="training">
+    <div class="eyebrow">Your self-paced toolkit</div>
+    <h2 class="title-mid">Four tools, one journey.</h2>
+    <p class="body-text">Beyond the live training, you've got four self-paced tools that go from foundations to certified mastery. Take the journey at your own pace.</p>
+    <div class="tool-grid">
+      <a href="https://clearpathcoverage.com/unl-ancillary-sales-crash-course/" target="_blank" rel="noopener" class="tool-card" style="text-decoration: none;">
+        <div class="tool-card-num">1.</div>
+        <div class="tool-card-name">Crash Course</div>
+        <div class="tool-card-desc">30-min read · the foundation · products, NEPQ, math, objections, compliance</div>
+      </a>
+      <a href="https://clearpathcoverage.com/unl-ancillary-agent-compensation/" target="_blank" rel="noopener" class="tool-card" style="text-decoration: none;">
+        <div class="tool-card-num">2.</div>
+        <div class="tool-card-name">Comp Model</div>
+        <div class="tool-card-desc">Interactive earnings calculator · model your pace + 5-year stacking</div>
+      </a>
+      <a href="https://clearpathcoverage.com/unl-rx-calculator/" target="_blank" rel="noopener" class="tool-card" style="text-decoration: none;">
+        <div class="tool-card-num">3.</div>
+        <div class="tool-card-name">Rx Calculator</div>
+        <div class="tool-card-desc">The live-call tool · plug in customer meds, see their real net cost</div>
+      </a>
+      <a href="https://clearpathcoverage.com/unl-academy/" target="_blank" rel="noopener" class="tool-card" style="text-decoration: none;">
+        <div class="tool-card-num">4.</div>
+        <div class="tool-card-name">Master Class</div>
+        <div class="tool-card-desc">~3 hrs · 4 pillars · 6 full annotated call scripts · Capstone simulation + cert</div>
+      </a>
+    </div>
+    <p class="body-small" style="text-align: center; margin-top: clamp(1.5rem, 2.5vh, 2rem);">All four tools live at clearpathcoverage.com — they're already deployed. Bookmark them.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~2 min</div>
+      <div class="notes-content">
+        <p><strong>Walk through the tools quickly. The point is they exist, not deep tour.</strong></p>
+        <ul>
+          <li>"Beyond the live training, here are four self-paced tools. They're already deployed at clearpathcoverage.com."</li>
+          <li><strong>1. Crash Course:</strong> "Start here. 30-minute read. Everything you need for your first conversation."</li>
+          <li><strong>2. Comp Model:</strong> "We just showed this — your interactive earnings tool."</li>
+          <li><strong>3. Rx Calculator:</strong> "Keep this open on every call. Plug in their meds, see their net cost."</li>
+          <li><strong>4. Master Class:</strong> "The deep mastery layer. Six full annotated master-call scripts you can read, four pillars of sales technique, a Capstone simulation that issues a verifiable cert when you pass. About 3 hours self-paced."</li>
+          <li>"Take the journey at your pace. The Crash Course will get you ready for your first call. The Master Class will make you sharp."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 30 · CONTRACTING ============ -->
+  <section class="slide slide--dark" data-section="next-step">
+    <div class="eyebrow">Next step</div>
+    <h2 class="close-big">Get <span class="accent">contracted.</span></h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.8); max-width: 56rem;">Before you can write your first policy, you need to be appointed with UNL. We'll send you the contracting paperwork right after this meeting. <strong>Contracting takes about a week</strong> — so the sooner you turn it around, the sooner you're ready to write.</p>
+    <p class="body-text" style="color: rgba(255,255,255,0.8); margin-top: 1rem; max-width: 56rem;">Standard appointment paperwork. We've done this with carriers before — same playbook. Go through next week's training while you wait, and you'll be appointed and trained right around the same time.</p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~90 sec</div>
+      <div class="notes-content">
+        <p><strong>Make the next step concrete. No ambiguity.</strong></p>
+        <ul>
+          <li>"This is the action step from today. Before you can write a UNL policy, you need to be appointed with them."</li>
+          <li>"We're sending out contracting paperwork right after this meeting."</li>
+          <li>"Contracting takes about a week to fully process — so the faster you get it back to us, the sooner you can start writing. The good news is you can attend next week's training while you wait. By the end of next week you'll be both appointed AND trained — ready to write."</li>
+          <li>Adjust this slide with your exact process — who sends the paperwork, where it comes from, who to reply to.</li>
+          <li>"Questions on contracting? Reach out after we wrap."</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ SLIDE 31 · CLOSE ============ -->
+  <section class="slide slide--accent" data-section="close">
+    <div class="eyebrow">Welcome to UNL</div>
+    <h2 class="close-big">You're about to add a real<br/>second income stream<br/><span class="accent">to your career.</span></h2>
+    <p class="body-text" style="color: rgba(255,255,255,0.8); max-width: 56rem;">Customer wins. You win. CPC wins. Same customer, same call, structurally better economics — and a product that fills a gap your prospects didn't know they had. <strong>See you Tuesday.</strong></p>
+    <p style="margin-top: clamp(2rem, 4vh, 3rem);"><span class="cta" style="cursor: default;">Questions?</span></p>
+    <div class="slide-brand">UNL Rollout · CPC</div>
+    <aside class="notes-overlay" data-notes>
+      <div class="notes-eyebrow">Speaker notes · ~60 sec + Q&amp;A</div>
+      <div class="notes-content">
+        <p><strong>Close warmly. Open Q&amp;A.</strong></p>
+        <ul>
+          <li>"Quick recap. UNL is a senior-focused ancillary carrier. Two products — HHC, the main thing, and HI, the cross-sell. They fill a real gap Medicare leaves behind. The math closes itself. You earn 25% upfront and 5% renewal every year. CPC covers your leads."</li>
+          <li>"Get contracted this weekend. See you Tuesday for HI training."</li>
+          <li>"What questions do you have?" — Open the floor.</li>
+        </ul>
+        <p class="notes-hint">Common questions to anticipate: lead volume, when first leads start coming, comparison to other ancillary carriers, retention/chargeback details. For deeper compliance / product / process questions, defer to Tuesday's training.</p>
+      </div>
+    </aside>
+  </section>
+
+</div>
+
+<!-- UI: counter + key hint + "open notes window" launcher -->
+<button type="button" class="presenter-launch" id="presenterLaunch" title="Open speaker notes in a separate window — keep this on your screen, the other window is what you share on Zoom">
+  📝 Open Notes Window
+</button>
+<div class="deck-ui">
+  <span class="deck-key-hint">← → · P notes window · F11 fullscreen</span>
+  <span class="deck-counter" id="deckCounter">1 / 31</span>
+</div>
+
+<!-- Presenter notes window (only visible when ?notes=1 is in the URL) -->
+<div class="notes-window-root" id="notesWindowRoot">
+  <div class="nw-topbar">
+    <div class="nw-brand">Presenter Notes · UNL Rollout</div>
+    <div class="nw-counter" id="nwCounter">— / —</div>
+  </div>
+  <div class="nw-eyebrow" id="nwEyebrow"></div>
+  <h1 class="nw-slide-title" id="nwSlideTitle"></h1>
+  <div class="nw-content" id="nwContent">
+    <div class="nw-empty">No notes for this slide.</div>
+  </div>
+  <div class="nw-next" id="nwNext"></div>
+  <div class="nw-nav">
+    <button type="button" class="nw-btn" id="nwPrev">← Previous</button>
+    <button type="button" class="nw-btn" id="nwNextBtn">Next →</button>
+    <button type="button" class="nw-btn nw-btn-secondary" id="nwJump">Jump to slide…</button>
+  </div>
+  <div class="nw-keyhint">
+    Navigation also works with arrow keys from <em>either</em> window. This window is for your eyes only — the main slide window is what you share on Zoom.
+  </div>
+</div>
+
+<script>
+  (function () {
+    'use strict';
+
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const counter = document.getElementById('deckCounter');
+    const isNotesMode = new URLSearchParams(window.location.search).get('notes') === '1';
+    let current = 0;
+
+    // Safe DOM helpers
+    function makeEl(tag, className, text) {
+      const el = document.createElement(tag);
+      if (className) el.className = className;
+      if (text !== undefined && text !== null) el.textContent = text;
+      return el;
+    }
+    function clearEl(el) { while (el && el.firstChild) el.removeChild(el.firstChild); }
+
+    // ----- Cross-window sync (BroadcastChannel with localStorage fallback) -----
+    let channel = null;
+    try { channel = new BroadcastChannel('unl-rollout-deck'); } catch (e) { channel = null; }
+
+    function broadcast(idx) {
+      const t = Date.now();
+      if (channel) { try { channel.postMessage({ type: 'slide', index: idx, t: t }); } catch (e) {} }
+      try { localStorage.setItem('unl-rollout-slide', idx + ':' + t); } catch (e) {}
+    }
+
+    function onRemoteSlide(cb) {
+      if (channel) {
+        channel.onmessage = function (e) {
+          if (e && e.data && e.data.type === 'slide' && typeof e.data.index === 'number') cb(e.data.index);
+        };
+      }
+      window.addEventListener('storage', function (e) {
+        if (e.key === 'unl-rollout-slide' && e.newValue) {
+          const idx = parseInt(e.newValue.split(':')[0], 10);
+          if (!isNaN(idx)) cb(idx);
+        }
+      });
+    }
+
+    // ============================================================
+    // NOTES WINDOW MODE
+    // ============================================================
+    if (isNotesMode) {
+      document.body.classList.add('is-notes-mode');
+      document.title = 'Presenter Notes — UNL Rollout';
+
+      const nwCounter = document.getElementById('nwCounter');
+      const nwEyebrow = document.getElementById('nwEyebrow');
+      const nwSlideTitle = document.getElementById('nwSlideTitle');
+      const nwContent = document.getElementById('nwContent');
+      const nwNext = document.getElementById('nwNext');
+      const nwPrev = document.getElementById('nwPrev');
+      const nwNextBtn = document.getElementById('nwNextBtn');
+      const nwJump = document.getElementById('nwJump');
+
+      function findSlideTitle(slide) {
+        const el = slide.querySelector('.title-mega, .close-big, .hook-line, .title-big, .title-mid');
+        return el ? el.textContent.trim().replace(/\s+/g, ' ') : '';
+      }
+
+      function renderNotes(idx) {
+        if (idx < 0 || idx >= slides.length) return;
+        current = idx;
+        const slide = slides[idx];
+        nwCounter.textContent = (idx + 1) + ' of ' + slides.length;
+        nwEyebrow.textContent = (slide.querySelector('.eyebrow')?.textContent || '').trim();
+        nwSlideTitle.textContent = findSlideTitle(slide);
+
+        clearEl(nwContent);
+        const notes = slide.querySelector('.notes-overlay');
+        let hasContent = false;
+        if (notes) {
+          const eyebrowNote = notes.querySelector('.notes-eyebrow');
+          if (eyebrowNote) { nwContent.appendChild(eyebrowNote.cloneNode(true)); hasContent = true; }
+          const contentEl = notes.querySelector('.notes-content');
+          if (contentEl) { nwContent.appendChild(contentEl.cloneNode(true)); hasContent = true; }
+          const hintEl = notes.querySelector('.notes-hint');
+          if (hintEl) { nwContent.appendChild(hintEl.cloneNode(true)); hasContent = true; }
+        }
+        if (!hasContent) {
+          nwContent.appendChild(makeEl('div', 'nw-empty', 'No notes for this slide.'));
+        }
+
+        // Next slide preview
+        clearEl(nwNext);
+        if (idx + 1 < slides.length) {
+          const nextSlide = slides[idx + 1];
+          const nextEyebrow = (nextSlide.querySelector('.eyebrow')?.textContent || '').trim();
+          const nextTitle = findSlideTitle(nextSlide);
+          nwNext.appendChild(makeEl('div', 'nw-next-label', 'Up next · Slide ' + (idx + 2)));
+          nwNext.appendChild(makeEl('div', 'nw-next-title', nextTitle || nextEyebrow || '(transition slide)'));
+        } else {
+          nwNext.appendChild(makeEl('div', 'nw-next-label', 'End of deck'));
+          nwNext.appendChild(makeEl('div', 'nw-next-title', 'Open Q&A — this is the final slide'));
+        }
+
+        nwPrev.disabled = (idx === 0);
+        nwNextBtn.disabled = (idx >= slides.length - 1);
+      }
+
+      function navTo(idx) { renderNotes(idx); broadcast(idx); }
+
+      nwPrev.addEventListener('click', function () { if (current > 0) navTo(current - 1); });
+      nwNextBtn.addEventListener('click', function () { if (current < slides.length - 1) navTo(current + 1); });
+      nwJump.addEventListener('click', function () {
+        const target = prompt('Jump to slide (1-' + slides.length + '):');
+        const n = parseInt(target, 10);
+        if (n && n >= 1 && n <= slides.length) navTo(n - 1);
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          e.preventDefault();
+          if (current < slides.length - 1) navTo(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          if (current > 0) navTo(current - 1);
+        } else if (e.key === 'Home') { e.preventDefault(); navTo(0); }
+        else if (e.key === 'End') { e.preventDefault(); navTo(slides.length - 1); }
+      });
+
+      onRemoteSlide(function (idx) { renderNotes(idx); });
+
+      const initial = parseInt(window.location.hash.replace('#', ''), 10);
+      renderNotes((initial && initial >= 1 && initial <= slides.length) ? initial - 1 : 0);
+      return;
+    }
+
+    // ============================================================
+    // MAIN DECK MODE
+    // ============================================================
+    function show(idx) {
+      if (idx < 0 || idx >= slides.length) return;
+      slides[current].classList.remove('is-active');
+      const activeNote = slides[current].querySelector('.notes-overlay');
+      if (activeNote) activeNote.classList.remove('is-visible');
+      current = idx;
+      slides[current].classList.add('is-active');
+      counter.textContent = (current + 1) + ' / ' + slides.length;
+      history.replaceState(null, '', '#' + (current + 1));
+      broadcast(idx);
+    }
+
+    function next() { if (current < slides.length - 1) show(current + 1); }
+    function prev() { if (current > 0) show(current - 1); }
+
+    function toggleInWindowNotes() {
+      const note = slides[current].querySelector('.notes-overlay');
+      if (note) note.classList.toggle('is-visible');
+    }
+
+    const launchBtn = document.getElementById('presenterLaunch');
+    let notesWin = null;
+
+    function openNotesWindow() {
+      if (notesWin && !notesWin.closed) { notesWin.focus(); return; }
+      const url = window.location.pathname + '?notes=1#' + (current + 1);
+      notesWin = window.open(url, 'unl-rollout-notes', 'width=820,height=900,menubar=no,toolbar=no,location=no,status=no');
+      if (notesWin) {
+        launchBtn.classList.add('is-connected');
+        launchBtn.textContent = '📝 Notes Window Open';
+      }
+    }
+
+    launchBtn.addEventListener('click', openNotesWindow);
+
+    window.addEventListener('focus', function () {
+      if (notesWin && notesWin.closed) {
+        launchBtn.classList.remove('is-connected');
+        launchBtn.textContent = '📝 Open Notes Window';
+        notesWin = null;
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      switch (e.key) {
+        case 'ArrowRight':
+        case ' ':
+        case 'PageDown':
+          e.preventDefault(); next(); break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          e.preventDefault(); prev(); break;
+        case 'Home':
+          e.preventDefault(); show(0); break;
+        case 'End':
+          e.preventDefault(); show(slides.length - 1); break;
+        case 'n':
+        case 'N':
+          e.preventDefault(); toggleInWindowNotes(); break;
+        case 'p':
+        case 'P':
+          e.preventDefault(); openNotesWindow(); break;
+      }
+    });
+
+    onRemoteSlide(function (idx) {
+      if (idx !== current && idx >= 0 && idx < slides.length) {
+        slides[current].classList.remove('is-active');
+        current = idx;
+        slides[current].classList.add('is-active');
+        counter.textContent = (current + 1) + ' / ' + slides.length;
+        history.replaceState(null, '', '#' + (current + 1));
+      }
+    });
+
+    const initial = parseInt(window.location.hash.replace('#', ''), 10);
+    if (initial && initial >= 1 && initial <= slides.length) show(initial - 1);
+    else counter.textContent = '1 / ' + slides.length;
+
+    counter.addEventListener('click', function () {
+      const target = prompt('Jump to slide (1-' + slides.length + '):');
+      const n = parseInt(target, 10);
+      if (n && n >= 1 && n <= slides.length) show(n - 1);
+    });
+  })();
+</script>
+
+</body>
+</html>
